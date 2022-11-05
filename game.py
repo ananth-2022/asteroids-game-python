@@ -156,37 +156,38 @@ def spawn_asteoids(l):
         sprites.add(a)
         asteroids.add(a)
 
-def game():
-    level = 1
-    player = Ship(50, 50, pg.math.Vector2(400, 400))
-    sprites.add(player)
-    ships.add(player)
-    spawn_asteoids(level)
+level = 1
+player = Ship(50, 50, pg.math.Vector2(400, 400))
+sprites.add(player)
+ships.add(player)
+spawn_asteoids(level)
 
-    while True:
-        for event in pg.event.get():
-            if event.type == pg.QUIT:
-                pg.quit()
-                raise SystemExit
+while True:
+    for event in pg.event.get():
+        if event.type == pg.QUIT:
+            pg.quit()
+            raise SystemExit
         
-        if not asteroids:
-            level += 1
-            spawn_asteoids(level)
-        asteroids_left = font.render(f'Asteroids left = {len(asteroids)}', True, 'white')
-        lives_left = font.render(f'Lives = {player.lives}', True, 'white')
-        level_label = font.render(f'Level {level}', True, "white")
-        sprites.update()
-        window.fill("black")
-        window.blit(asteroids_left, (10, 10))
-        window.blit(lives_left, (650, 10))
-        window.blit(level_label, (400, 10))
-        sprites.draw(window)
-        if not player.alive():
-            game_over = font.render('GAME OVER!! press r to restart', True, "red")
-            window.blit(game_over, (400, 400))
-            if pg.key.get_pressed()[pg.K_r]:
-                game()
-        pg.display.flip()
-        clock.tick(60)
-
-game()
+    if not asteroids:
+        level += 1
+        spawn_asteoids(level)
+    asteroids_left = font.render(f'Asteroids left = {len(asteroids)}', True, 'white')
+    lives_left = font.render(f'Lives = {player.lives}', True, 'white')
+    level_label = font.render(f'Level {level}', True, "white")
+    sprites.update()
+    window.fill("black")
+    window.blit(asteroids_left, (10, 10))
+    window.blit(lives_left, (650, 10))
+    window.blit(level_label, (400, 10))
+    sprites.draw(window)
+    if not player.alive():
+        game_over = font.render('GAME OVER!! press r to restart', True, "red")
+        window.blit(game_over, (400, 400))
+        if pg.key.get_pressed()[pg.K_r]:
+            level = 0
+            sprites.empty()
+            asteroids.empty()
+            player.lives = 3
+            sprites.add(player)
+    pg.display.flip()
+    clock.tick(60)
